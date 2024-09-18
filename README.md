@@ -201,7 +201,7 @@ Lcd_HandleTypeDef lcd;
 void lcd_display()
 {
 	Lcd_cursor(&lcd,0,1);
-	Lcd_string(&lcd,"Name:DIVYA P\n");
+	Lcd_string(&lcd,"Name:ARIVAZHAGAN G RP\n");
 
 	Lcd_cursor(&lcd,1,1);
 	Lcd_string(&lcd,"212223040044\n");
