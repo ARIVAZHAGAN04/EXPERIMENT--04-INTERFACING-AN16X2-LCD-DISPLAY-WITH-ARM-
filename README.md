@@ -1,3 +1,5 @@
+# Name: ARIVAZHAGAN G R
+# RegisterNo: 212223040020
 # EXPERIMENT--04-INTERFACING-AN16X2-LCD-DISPLAY-WITH-ARM AND DISPLAY STRING
 
 
@@ -115,63 +117,78 @@ C2
 Jump to second line, position 2
  
 ## Procedure:
- 1. click on STM 32 CUBE IDE, the following screen will appear
+1. click on STM 32 CUBE IDE, the following screen will appear 
 
- 2. click on FILE, click on new stm 32 project 
- 3. select the target to be programmed  as shown below and click on next 
- 4.select the program name 
- 5. corresponding ioc file will be generated automatically 
- 6.select the appropriate pins as gipo, in or out, USART or required options and configure
- 7.click on cntrl+S , automaticall C program will be generated
- 8. edit the program and as per required
- 9. Add necessary library files of LCD 16x2 , write the program and use project and build  
- 10. once the project is bulild 
- 11. click on debug option 
- 12.  Creating Proteus project and running the simulation
- We are now at the last part of step by step guide on how to simulate STM32 project in Proteus.
+2. click on FILE, click on new stm 32 project 
 
- 13. Create a new Proteus project and place STM32F40xx i.e. the same MCU for which the project was created  in STM32Cube IDE. 
- 14. After creation of the circuit as per requirement as shown below 
- 15. Double click on the the MCU part to open settings. Next to the Program File option, give full path to the Hex file generated using STM32Cube IDE. Then set the external crystal frequency to 8M (i.e. 8 MHz). Click OK to save the    changes.
- https://engineeringxpert.com/wp-content/uploads/2022/04/26.png
- 16. click on debug and simulate using simulation as shown below 
+3. select the target to be programmed and click on next
+   
+4.select the program name 
+
+5. corresponding ioc file will be generated automatically 
+
+6.select the appropriate pins as gipo, in or out, USART or required options and configure 
+
+7.click on cntrl+S , automaticall C program will be generated 
+
+8. edit the program and as per required 
+
+9. Add necessary library files of LCD 16x2 , write the program and use project and build  
+
+10. once the project is bulild 
+
+11. click on debug option 
+
+12.  Creating Proteus project and running the simulation
+We are now at the last part of step by step guide on how to simulate STM32 project in Proteus.
+
+13. Create a new Proteus project and place STM32F40xx i.e. the same MCU for which the project was created in STM32Cube IDE. 
+
+14. After creation of the circuit as per requirement 
+
+
+15. Double click on the the MCU part to open settings. Next to the Program File option, give full path to the Hex file generated using STM32Cube IDE. Then set the external crystal frequency to 8M (i.e. 8 MHz). Click OK to save the changes.
+
+16. click on debug and simulate using simulation 
 
 ## CIRCUIT DIAGRAM 
 ![image](https://user-images.githubusercontent.com/36288975/233857974-bda6200e-4f88-4e7b-b189-4da80210fa23.png)
 
+
 ## STM 32 CUBE PROGRAM :
-```
+
 #include "main.h"
 #include "lcd.h"
-void lcd_display(void);
-Lcd_PortType ports[] = {GPIOA,GPIOA,GPIOA,GPIOA};
-Lcd_PinType pins[] = {GPIO_PIN_3,GPIO_PIN_2,GPIO_PIN_1,GPIO_PIN_0};
+
+Lcd_PortType Ports[] = {GPIOA,GPIOA,GPIOA,GPIOA};
+Lcd_PinType Pins[] = {GPIO_PIN_3,GPIO_PIN_2,GPIO_PIN_1,GPIO_PIN_0};
 Lcd_HandleTypeDef lcd;
 
+void lcd_display()
+{
+	Lcd_cursor(&lcd,0,1);
+	Lcd_string(&lcd,"Name\n");
+
+	Lcd_cursor(&lcd,1,1);
+	Lcd_string(&lcd,"Reg.NO\n");
+
+	}
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
 int main(void)
 {
+
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();
 
-  lcd = Lcd_create(ports, pins, GPIOB, GPIO_PIN_0, GPIOB, GPIO_PIN_1, LCD_4_BIT_MODE);
 
+  lcd = Lcd_create(Ports,Pins,GPIOB,GPIO_PIN_0,GPIOB,GPIO_PIN_1,LCD_4_BIT_MODE);
   while (1)
   {
     lcd_display();
   }
-}
-
-void lcd_display()
-{
-  Lcd_cursor(&lcd, 0, 1);
-  Lcd_string(&lcd, "Name:\n");
-
-  Lcd_cursor(&lcd, 1, 1);
-  Lcd_string(&lcd, "Reg No:\n");
 }
 
 void SystemClock_Config(void)
@@ -181,6 +198,7 @@ void SystemClock_Config(void)
 
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
+
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -190,7 +208,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -205,22 +224,27 @@ void SystemClock_Config(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_1, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3, GPIO_PIN_RESET);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3;
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1, GPIO_PIN_RESET);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
 }
+
 
 void Error_Handler(void)
 {
@@ -230,18 +254,24 @@ void Error_Handler(void)
   }
 }
 
+#ifdef  USE_FULL_ASSERT
 void assert_failed(uint8_t *file, uint32_t line)
-{
-}
-```
-## Output screen shots of proteus  :
-![image](https://github.com/user-attachments/assets/1dcd5561-aee8-4700-ac2e-353b09bcd39e)
- ![image](https://github.com/user-attachments/assets/63e2e44e-4cda-44f8-b004-aa76673945cd)
+#endif
 
-## CIRCUIT DIAGRAM (EXPORT THE GRAPHICS TO PDF AND ADD THE SCREEN SHOT HERE): 
-![image](https://github.com/user-attachments/assets/23024ff0-e9a2-47ea-9b30-aae5d9045a3b)
+
+
+
+
+
+## Output screen shots of proteus  :
+
+ ![pcm41](https://github.com/user-attachments/assets/f1136fd5-e573-449b-9d16-aa457c5a0e50)
+ 
 
  
-## Result :
-Interfacing a lcd display with ARM microcontroller are simulated in proteus and the results are verified.
+ ## CIRCUIT DIAGRAM (EXPORT THE GRAPHICS TO PDF AND ADD THE SCREEN SHOT HERE): 
+ 
+ ![pcm4](https://github.com/user-attachments/assets/7b70e3a6-2f68-4257-9c87-b7d4318069a9)
 
+## Result :
+Interfacing a lcd display with ARM microcontroller are simulated in proteus and the results are verified.
